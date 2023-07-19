@@ -9,7 +9,7 @@ read -p "Enter a chain-id: " CHAIN_ID
 
 # TODO: Check if the chain-id is valid
 # Check that the chain-id is a valid string that contains the word "internal-devnet" or "testnet"
-if [[ "$CHAIN_ID" != *"internal-devnet"* ]] && [[ "$CHAIN_ID" != *"testnet"* ]]
+if [ "$CHAIN_ID" != *"internal-devnet"* ] && [ "$CHAIN_ID" != *"testnet"* ]
 then
     echo "Please provide a valid chain-id"
     exit 1
@@ -48,7 +48,7 @@ elif [ "$HAS_BINARIES" = "n" ]; then
     fi
     # Attempt to download the binaries
     echo "Downloading namada binaries v$NAMADA_VERSION"
-    source $SCRIPT_DIR/utils/download_binaries.sh
+    $SCRIPT_DIR/utils/download_binaries.sh
     download_namada_binaries $NAMADA_VERSION
     NAMADA_BIN_DIR="$SCRIPT_DIR/namada_binaries"
 else
@@ -111,7 +111,7 @@ then
     # Check if the path provided is a valid directory and contains the cometbft binaries
     if [ "$INSTALL_COMETBFT" = "y" ]
     then
-        source $SCRIPT_DIR/utils/download_binaries.sh
+        $SCRIPT_DIR/utils/download_binaries.sh
         download_cometbft_binaries
     else
         echo "Please install cometbft (and put them onto path) before running the ledger"
@@ -146,7 +146,7 @@ if [ "$IS_LEDGER_RUNNING" = "y" ]; then
 
         # Check if the node is caught up
     
-        source $SCRIPT_DIR/utils/ledger_commands.sh
+        $SCRIPT_DIR/utils/ledger_commands.sh
         basic_init
     fi
 else

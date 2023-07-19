@@ -16,7 +16,7 @@ download_namada_binaries(){
     fi
 
     # Check if the version is valid
-    if ! [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+    if ! [ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]
     then
         echo "Please provide a valid version of the binaries to download in the format x.y.z"
         exit 1
@@ -141,7 +141,7 @@ download_cometbft_binaries(){
     CMT_EXISTS_VER=$(${CMT_EXECUTABLE} version)
     fi
 
-    if [[ $CMT_EXISTS_VER == "${CMT_MAJORMINOR}" ]]; then
+    if [ $CMT_EXISTS_VER == "${CMT_MAJORMINOR}" ]; then
     echo "cometbft already exists in your current PATH with a sufficient version = $CMT_EXISTS_VER"
     echo "cometbft is located at = $(which cometbft)"
     exit
@@ -150,7 +150,7 @@ download_cometbft_binaries(){
     read -r SYSTEM MACHINE <<< "$(uname -s -m)"
 
     ARCH="amd64"
-    if [[ $MACHINE = "aarch64" ]] || [[ $MACHINE = "arm64" ]]; then
+    if [ $MACHINE = "aarch64" ] || [ $MACHINE = "arm64" ]; then
     ARCH="arm64"
     fi
 

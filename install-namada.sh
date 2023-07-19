@@ -17,7 +17,7 @@ then
 fi
 # Attempt to download the binaries
 echo "Downloading namada binaries v$NAMADA_VERSION"
-source $SCRIPT_DIR/utils/download_binaries.sh
+$SCRIPT_DIR/utils/download_binaries.sh
 download_namada_binaries $NAMADA_VERSION
 
 echo "Downloading cometbft binaries"
