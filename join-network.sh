@@ -9,7 +9,7 @@ read -p "Enter a chain-id: " CHAIN_ID
 
 # TODO: Check if the chain-id is valid
 # Check that the chain-id is a valid string that contains the word "internal-devnet" or "testnet"
-if [ "$CHAIN_ID" != *"internal-devnet"* ] || [ "$CHAIN_ID" != *"testnet"* ]
+if ! echo "$CHAIN_ID" | grep -qE 'internal-devnet|testnet';
 then
     echo "Please provide a valid chain-id"
     exit 1
