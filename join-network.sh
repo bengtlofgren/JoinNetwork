@@ -134,6 +134,18 @@ echo "Is the ledger running? (y/n)"
 read -p "Enter (y/n): " IS_LEDGER_RUNNING
 
 if [ "$IS_LEDGER_RUNNING" = "y" ]; then
+
+    if ! command_exists jq; then
+        if command_exists apt-get; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq jq
+        elif command_exists yum; then 
+            sudo yum install -y -q jq
+        else
+            echo "Error: Unable to install jq. Please install jq manually."
+            exit 1
+        fi
+    fi
     catching_up=$(curl -s localhost:26657/status | jq -r ".result.sync_info.catching_up")
 
     while [ "$catching_up" = "true" ]; do
@@ -148,7 +160,7 @@ if [ "$IS_LEDGER_RUNNING" = "y" ]; then
 
         # Check if the node is caught up
     
-        $SCRIPT_DIR/utils/ledger_commands.sh
+        . $SCRIPT_DIR/utils/ledger_commands.sh
         basic_init
     fi
 else

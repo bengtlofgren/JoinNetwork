@@ -168,27 +168,11 @@ EOF
     sudo mv cometbft $TARGET_PATH/cometbft
     rm $TMP_PATH/cometbft.tar.gz
 
-    # Add the binaries to the PATH
-    export PATH=$PATH:$TARGET_PATH
-
-
-
     # Check if the binaries are in the PATH
     if ! command_exists cometbft
     then
-        echo $(cometbft)
         echo "The binaries failed to be added to PATH"
         exit 1
-    fi
-
-    echo "Would you like to add the binaries to the PATH permanently? (y/n)"
-    read -r ADD_TO_PATH
-
-    if [ "$ADD_TO_PATH" = "y" ]
-    then
-        # Add the binaries to the PATH permanently
-        echo "This will prompt your password in order to access your PATH variable"
-        sudo cp $(which cometbft) /usr/local/bin
     fi
 
     echo "cometbft successfully installed"
