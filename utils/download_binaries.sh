@@ -16,8 +16,7 @@ download_namada_binaries(){
     fi
 
     # Check if the version is valid
-    if ! [ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]
-    then
+    if ! expr "$1" : '^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
         echo "Please provide a valid version of the binaries to download in the format x.y.z"
         exit 1
     fi
@@ -88,13 +87,15 @@ download_namada_binaries(){
     # Make the binaries executable
     chmod +x namada_binaries/*
 
-    # Add the binaries to the PATH
-    export PATH=$PATH:$(pwd)/namada_binaries
+    # Check that the binaries in the namada_binaries folder are executable
+    if [ ! -x namada_binaries/namada ]; then 
+        echo "Failed to install: The namada binary is not executable"
+        exit 1
+    fi
 
-    # Check if the binaries are in the PATH
-    if ! command -v namada &> /dev/null
-    then
-        echo "The binaries failed to be added to PATH"
+    # Check that the namada binary is the correct version
+    if ! namada_binaries/namada --version | grep -q "v$NAMADA_VERSION"; then
+        echo "Failed to install: The namada binary is not the correct version"
         exit 1
     fi
 
@@ -118,7 +119,6 @@ download_namada_binaries(){
 }
 
 download_cometbft_binaries(){
-    set -Eo pipefail
     CMT_MAJORMINOR="0.37"
     CMT_PATCH="2"
 
@@ -141,13 +141,16 @@ download_cometbft_binaries(){
     CMT_EXISTS_VER=$(${CMT_EXECUTABLE} version)
     fi
 
-    if [ $CMT_EXISTS_VER == "${CMT_MAJORMINOR}" ]; then
+    if [ $CMT_EXISTS_VER = "${CMT_MAJORMINOR}" ]; then
     echo "cometbft already exists in your current PATH with a sufficient version = $CMT_EXISTS_VER"
     echo "cometbft is located at = $(which cometbft)"
     exit
     fi
 
-    read -r SYSTEM MACHINE <<< "$(uname -s -m)"
+    read -r SYSTEM MACHINE <<EOF
+$(uname -s -m)
+EOF
+
 
     ARCH="amd64"
     if [ $MACHINE = "aarch64" ] || [ $MACHINE = "arm64" ]; then
@@ -161,6 +164,8 @@ download_cometbft_binaries(){
 
     sudo tar -xvzf $TMP_PATH/cometbft.tar.gz cometbft || error_exit "cometbft release extraction failed"
 
+    echo "This may prompt a user password to put cometbft on path"
+    sudo mv cometbft $TARGET_PATH/cometbft
     rm $TMP_PATH/cometbft.tar.gz
 
     # Add the binaries to the PATH
@@ -169,8 +174,9 @@ download_cometbft_binaries(){
 
 
     # Check if the binaries are in the PATH
-    if ! command -v cometbft &> /dev/null
+    if ! command_exists cometbft
     then
+        echo $(cometbft)
         echo "The binaries failed to be added to PATH"
         exit 1
     fi

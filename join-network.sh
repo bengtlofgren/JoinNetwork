@@ -1,6 +1,8 @@
 #!/bin/sh
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+# Access the command_exists function
+. $SCRIPT_DIR/utils/command_not_found.sh
 
 echo "This script will allow you to join a namada chain"
 
@@ -48,7 +50,7 @@ elif [ "$HAS_BINARIES" = "n" ]; then
     fi
     # Attempt to download the binaries
     echo "Downloading namada binaries v$NAMADA_VERSION"
-    $SCRIPT_DIR/utils/download_binaries.sh
+    . $SCRIPT_DIR/utils/download_binaries.sh
     download_namada_binaries $NAMADA_VERSION
     NAMADA_BIN_DIR="$SCRIPT_DIR/namada_binaries"
 else
@@ -103,7 +105,7 @@ fi
 echo "You have successfully joined the network"
 
 # Check that cometbft is installed before running the ledger
-if ! command -v cometbft &> /dev/null
+if ! command_exists cometbft;
 then
     echo "Cometbft was not found on path, would you like to install it now? (y/n)"
     read -p "Enter (y/n): " INSTALL_COMETBFT
@@ -111,7 +113,7 @@ then
     # Check if the path provided is a valid directory and contains the cometbft binaries
     if [ "$INSTALL_COMETBFT" = "y" ]
     then
-        $SCRIPT_DIR/utils/download_binaries.sh
+        . $SCRIPT_DIR/utils/download_binaries.sh
         download_cometbft_binaries
     else
         echo "Please install cometbft (and put them onto path) before running the ledger"
@@ -121,7 +123,7 @@ fi
 
 echo "Please run the ledger in a separate terminal window by copying and pasting the following command:"
 # if namada is on path then print the command without the namada_bin_dir path
-if command -v namada &> /dev/null
+if command_exists namada;
 then
     echo "namada node ledger run"
 else

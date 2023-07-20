@@ -5,9 +5,11 @@ command_exists() {
     local path=$(which "$1")
     # check if path is actually a path
     if [ -n "$path" ] && [ -f "$path" ]; then
-        return true
+        # return is for exit status, so good path -> 0
+        return 0
     fi
-    return false
+    # return is for exit status, so bad path -> 1
+    return 1
 }
 
 # Check if wget is installed
