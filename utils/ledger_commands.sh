@@ -14,18 +14,18 @@ create_keys(){
 
 masp_setup(){
     echo "Creating keys and payment addresses ..."
-    echo "Creating key alice"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "alice" --unsafe-dont-encrypt
+    echo "Creating key alice-masp"
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "alice-masp" --unsafe-dont-encrypt
     echo "Creating payment address pay-alice"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-alice" --key "alice"
-    echo "Creating key bob"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "bob" --unsafe-dont-encrypt
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-alice" --key "alice-masp"
+    echo "Creating key bob-masp"
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "bob-masp" --unsafe-dont-encrypt
     echo "Creating payment address pay-bob"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-bob" --key "bob"
-    echo "Creating key charlie"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "charlie" --unsafe-dont-encrypt
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-bob" --key "bob-masp"
+    echo "Creating key charlie-masp"
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-key --alias "charlie-masp" --unsafe-dont-encrypt
     echo "Creating payment address pay-charlie"
-    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-charlie" --key "charlie"
+    $NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" masp gen-addr --alias "pay-charlie" --key "charlie-masp"
 }
 
 fund_account(){
