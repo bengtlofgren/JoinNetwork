@@ -123,12 +123,18 @@ fi
 
 echo "Please run the ledger in a separate terminal window by copying and pasting the following command:"
 # if namada is on path then print the command without the namada_bin_dir path
+
 if command_exists namada;
 then
-    echo "namada node ledger run"
+    echo ""
+    printf "${BOLD}${YELLOW} namada node ledger run ${RESET}\n"
+    echo ""
 else
-    echo "$NAMADA_BIN_DIR/namada node ledger run"
+    echo ""
+    printf "${BOLD}${YELLOW} $NAMADA_BIN_DIR/namada node ledger run ${RESET}\n"
+    echo ""
 fi
+
 
 echo "Is the ledger running? (y/n)"
 read -p "Enter (y/n): " IS_LEDGER_RUNNING
