@@ -29,8 +29,9 @@ masp_setup(){
 }
 
 fund_account(){
-    # Takes 1 argument
+    # Takes 2 argument
     # $1 = account name
+    # $2 = token name
 
     # Check if the account exists
     is_in_wallet=$($NAMADA_BIN_DIR/namadaw --base-dir "$BASE_DIR" address list | grep $1)
@@ -39,8 +40,8 @@ fund_account(){
     else
         echo "Funding $1"
         $NAMADA_BIN_DIR/namadac --base-dir "$BASE_DIR" transfer \
-            --amount=1000 \
-            --token nam \
+            --amount 1000 \
+            --token $2 \
             --source faucet \
             --target $1 \
             --signer $1
@@ -51,10 +52,11 @@ transfer_nam(){
     local from=$1
     local to=$2
     local amount=$3
+    local token=$4
 
     $NAMADA_BIN_DIR/namadac --base-dir "$BASE_DIR" transfer \
         --amount=$amount \
-        --token nam \
+        --token $token \
         --source $from \
         --target $to \
         --signer $from
@@ -65,20 +67,22 @@ basic_init(){
     create_keys
 
     # Fund accounts
-    fund_account alice
-    fund_account bob
-    fund_account charlie
+    fund_account alice nam
+    fund_account bob nam
+    fund_account charlie nam
     # Give the banker ample funds
-    fund_account banker
-    fund_account banker
-    fund_account banker
-    fund_account banker
+    fund_account banker nam
+    fund_account banker nam
+    fund_account banker nam
+    fund_account banker nam
 
     # Do a basic masp setup
     masp_setup
 
     # Send money from banker to the different payment addresses
     echo "Sending money from banker to the different payment addresses"
-
+    transfer_nam banker pay-alice 1000 nam
+    transfer_nam banker pay-bob 1000 nam
+    transfer_nam banker pay-charlie 1000 nam
 
 }
